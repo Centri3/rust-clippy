@@ -12,7 +12,7 @@
 #![cfg_attr(feature = "deny-warnings", deny(warnings))]
 #![allow(clippy::missing_docs_in_private_items, clippy::must_use_candidate)]
 #![warn(trivial_casts, trivial_numeric_casts)]
-// warn on lints, that are included in `rust-lang/rust`s bootstrap
+// warn on lints that are included in `rust-lang/rust`s bootstrap
 #![warn(rust_2018_idioms, unused_lifetimes)]
 // warn on rustc internal lints
 #![warn(rustc::internal)]
@@ -47,6 +47,18 @@ extern crate thin_vec;
 extern crate clippy_utils;
 #[macro_use]
 extern crate declare_clippy_lint;
+#[macro_use]
+extern crate clippy_macros;
+
+#[derive(Paperclip)]
+pub struct NewLint {
+    /// ### What it does
+    /// Oops!
+    #[paperclip(lint(version = "1.61.0", complexity, desc = ""))]
+    pub d: Lint,
+    #[paperclip(lint(version = "1.61.0", complexity, desc = ""))]
+    pub some_lint: Lint,
+}
 
 use std::io;
 use std::path::PathBuf;
@@ -54,6 +66,8 @@ use std::path::PathBuf;
 use clippy_utils::msrvs::Msrv;
 use rustc_data_structures::fx::FxHashSet;
 use rustc_lint::{Lint, LintId};
+use rustc_session::declare_tool_lint;
+use rustc_session::impl_lint_pass;
 use rustc_session::Session;
 
 #[cfg(feature = "internal")]
